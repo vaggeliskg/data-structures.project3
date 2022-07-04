@@ -1,0 +1,21 @@
+name: run-tests
+on: [push]
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: make UsingHashWithSet_ADTMap_test
+        run: cd tests && make UsingHashWithSet_ADTMap_test
+        continue-on-error: true
+
+      - name: Run UsingHashWithSet_ADTMap_test
+        run: (cd tests && ./UsingHashWithSet_ADTMap_test) || true
+
+      - name: make UsingCuckooHash_ADTMap_test
+        run: cd tests && make UsingCuckooHash_ADTMap_test
+        continue-on-error: true
+
+      - name: Run UsingCuckooHash_ADTMap_test
+        run: (cd tests && ./UsingCuckooHash_ADTMap_test) || true
