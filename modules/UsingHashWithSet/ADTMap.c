@@ -30,7 +30,7 @@ struct map_node{
 
 struct bucket{
 	Set set;
-	MapNode bucket_array[3];
+	Pointer bucket_array[3];
 	int bucket_array_size;
 };
 
@@ -54,6 +54,7 @@ Map map_create(CompareFunc compare, DestroyFunc destroy_key, DestroyFunc destroy
 	for(int i = 0; i < map->capacity; i++) {
 		for(int i = 0; i < 3; i++)
 		map->array[i].bucket_array[i] = NULL;
+		//map->array[i].bucket_array[i] = NULL;
 	}
 	map->size = 0;
 	map->compare = compare;
@@ -72,12 +73,19 @@ int map_size(Map map) {
 // ανανέωση του με ένα νέο value, και η συνάρτηση επιστρέφει true.
 
 void map_insert(Map map, Pointer key, Pointer value) {
-	//bool already_in = false;
+	bool already_in = false;
 	Pointer node = NULL;
 	MapNode node_m = NULL;
 	uint pos;
 	pos = map->hash_function(key) % map->capacity;
 	if(map->array[pos].bucket_array_size < FIXED_SIZE) {
+	//   if(map->compare(map->array[pos].bucket_array,key) == 0) {
+	// 	  already_in = true;
+	// 	  node = &map->array[pos].bucket_array[0];
+	// 	  node_m = node;
+	//   }
+
+	
 		if(map->array[pos].bucket_array[0] == NULL) { 
 			if(node == NULL) {
  				node = &map->array[pos].bucket_array[0];
@@ -87,9 +95,6 @@ void map_insert(Map map, Pointer key, Pointer value) {
 				node_m->value = value;
 				map->size++;
 				map->array[pos].bucket_array_size++;
-				//printf("%d\n",map->array[pos].bucket_array_size);
-				//printf("%p\n",map->array[pos].bucket_array[0]);
-				//printf("%p\n",map->array[pos].bucket_array[0]->value);
 
 			}
 		}
@@ -104,7 +109,7 @@ void map_insert(Map map, Pointer key, Pointer value) {
 				map->array[pos].bucket_array_size++;
 			}
 		}
-		else if(map->array[pos].bucket_array[1] != NULL &&map->array[pos].bucket_array[2] == NULL) {
+		else if(map->array[pos].bucket_array[1] != NULL && map->array[pos].bucket_array[2] == NULL) {
 			if(node == NULL) {
 				node = &map->array[pos].bucket_array[2];
 				node_m = node;
@@ -115,9 +120,25 @@ void map_insert(Map map, Pointer key, Pointer value) {
 				map->size++;
 			}
 		}
+		if(already_in) {
+			if(node_m->key != key && map->destroy_key != NULL) {
+				map->destroy_key(node_m->key);
+			}
+			if(node_m->value != key && map->destroy_value != NULL) {
+				map->destroy_value(node_m->value);
+			}
+		}
 	}
+		printf(" [0] = %p\n",map->array[45].bucket_array[0]);
+		printf(" [1] = %p\n",map->array[45].bucket_array[1]);
+		printf(" [2] = %p\n",map->array[45].bucket_array[2]);
+		printf(" key = %p\n",key);
+		printf(" value = %p\n",value);
+		printf(" m_node = %p\n",node_m);
+		printf(" state = %p\n",&node_m->state);
+
 		
- }
+}
 // Διαργραφή απο το Hash Table του κλειδιού με τιμή key
 bool map_remove(Map map, Pointer key) {
 	return false;
