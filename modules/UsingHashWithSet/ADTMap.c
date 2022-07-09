@@ -84,15 +84,14 @@ void map_insert(Map map, Pointer key, Pointer value) {
 	// 	  node = &map->array[pos].bucket_array[0];
 	// 	  node_m = node;
 	//   }
-
-	
 		if(map->array[pos].bucket_array[0] == NULL) { 
 			if(node == NULL) {
  				node = &map->array[pos].bucket_array[0];
+				//map->array[pos].bucket_array[0] = &node_m;
 				node_m = node;
-				node_m->state = OCCUPIED;
+				//node_m->state = OCCUPIED;
 				node_m->key = key;
-				node_m->value = value;
+				//node_m->value = value;
 				map->size++;
 				map->array[pos].bucket_array_size++;
 
@@ -102,9 +101,9 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			if(node == NULL) {
 				node = &map->array[pos].bucket_array[1];
 				node_m = node;
-				node_m->state = OCCUPIED;
+				//node_m->state = OCCUPIED;
 				node_m->key = key;
-				node_m->value = value;
+				//node_m->value = value;
 				map->size++;
 				map->array[pos].bucket_array_size++;
 			}
@@ -113,9 +112,9 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			if(node == NULL) {
 				node = &map->array[pos].bucket_array[2];
 				node_m = node;
-				node_m->state = OCCUPIED;
+				//node_m->state = OCCUPIED;
 				node_m->key = key;
-				node_m->value = value;
+				//node_m->value = value;
 				map->array[pos].bucket_array_size++;
 				map->size++;
 			}
@@ -129,13 +128,15 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			}
 		}
 	}
-		printf(" [0] = %p\n",map->array[45].bucket_array[0]);
-		printf(" [1] = %p\n",map->array[45].bucket_array[1]);
-		printf(" [2] = %p\n",map->array[45].bucket_array[2]);
-		printf(" key = %p\n",key);
-		printf(" value = %p\n",value);
-		printf(" m_node = %p\n",node_m);
-		printf(" state = %p\n",&node_m->state);
+		// printf(" [0] = %p\n",map->array[45].bucket_array[0]);
+		// printf(" [1] = %p\n",map->array[45].bucket_array[1]);
+		// printf(" [2] = %p\n",map->array[45].bucket_array[2]); 
+		// printf(" key = %p\n",key);
+		// printf(" value = %p\n",value);
+		// printf(" state = %p\n",&node_m->state);
+		// printf(" m_node = %p\n",node_m);
+		// printf(" &m_node = %p\n",&node_m);
+		// printf(" state = %p\n",&node_m->state);
 
 		
 }
