@@ -115,21 +115,14 @@ void edit_arrays(Map map, Pointer key, Pointer value, bool occupied_array1, bool
 		rehash(map);
 	}
 	uint pos1 = map->hash_function(key) % map->capacity;
-	uint pos2 = (map->hash_function(key)^2 / map->capacity) % map->capacity;
+	uint pos2 = (map->hash_function(key) / map->capacity) % map->capacity;
 
 	map->cuckoo_counter++;
 	//αν έχω στοιχεία στον 1ο πίνακα τότε πάμε στον 2ο ο οποίος αν είναι γεμάτος αντικαθιστούμε 
-	if(occupied_array1) { // τα παλιά key/value και τα κάνουμε destroy
+	if(occupied_array1) { // τα παλιά key/value 
 		if(map->array2[pos2].state == OCCUPIED) {
-			if(map->compare(map->array2[pos2].key,key) == 0) {
-				if(map->array2[pos2].key != key && map->destroy_key != NULL)
-					map->destroy_key(map->array2[pos2].key);
-				if(map->array2[pos2].value != key && map->destroy_value != NULL)
-					map->destroy_value(map->array2[pos2].value);
-
 				map->array2[pos2].key = key;    //βάζουμε τα νεα key/value
 				map->array2[pos2].value = value;
-			}
 		}
 		else if(map->array2[pos2].state == EMPTY) { //αν ο 2ος είναι άδειος βάζουμε τα key/value
 			map->array2[pos2].key = key;
@@ -139,16 +132,9 @@ void edit_arrays(Map map, Pointer key, Pointer value, bool occupied_array1, bool
 		}
 	}
 	else if(occupied_array2) { //αν έχω στοιχεία στον 2ο πίνακα τότε πάμε στον 1ο ο οποίος αν είναι γεμάτος αντικαθιστούμε 
-		if(map->array1[pos1].state == OCCUPIED) {  // τα παλιά key/value και τα κάνουμε destroy
-			if(map->compare(map->array1[pos1].key,key) == 0) {
-				if(map->array1[pos1].key != key && map->destroy_key != NULL)
-					map->destroy_key(map->array1[pos1].key);
-				if(map->array1[pos1].value != key && map->destroy_value != NULL)
-					map->destroy_value(map->array1[pos1].value);
-				
+		if(map->array1[pos1].state == OCCUPIED) {  // τα παλιά key/value 
 				map->array1[pos1].key = key;
 				map->array1[pos1].value = value;
-			}
 		}
 		else if(map->array1[pos1].state == EMPTY) { //αν ο 1ος είναι άδειος βάζουμε τα key/value
 			map->array1[pos1].key = key;
@@ -187,8 +173,6 @@ void map_insert(Map map, Pointer key, Pointer value) {
 	float load_factor = (float)map->size / map->capacity; //in case load_Factor exceeds 0.5
 	if(load_factor > MAX_LOAD_FACTOR)
 		rehash(map);
-	//printf("pos:%d\n",pos1);
-	//printf("map size :%d\n", map->size);
 }
 
 // Διαργραφή απο το Hash Table του κλειδιού με τιμή key

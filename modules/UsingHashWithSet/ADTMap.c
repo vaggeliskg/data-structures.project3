@@ -59,7 +59,6 @@ Map map_create(CompareFunc compare, DestroyFunc destroy_key, DestroyFunc destroy
 	map->compare = compare;
 	map->destroy_key = destroy_key;
 	map->destroy_value = destroy_value;
-	//printf("%p\n",map->array[1].bucket_array[0]);
 	return map;
 }
 
@@ -88,7 +87,6 @@ void map_insert(Map map, Pointer key, Pointer value) {
 				node_m->value = value;
 				map->size++;
 				map->array[pos].bucket_array_size++;
-
 			}
 		}
 		else if(map->array[pos].bucket_array[0] != NULL && map->array[pos].bucket_array[1] == NULL ) {
@@ -122,11 +120,6 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			}
 		}
 	}
-		// printf(" [0] = %p\n",map->array[pos].bucket_array[0]);
-		// printf(" [1] = %p\n",map->array[pos].bucket_array[1]);
-		// printf(" [2] = %p\n",map->array[pos].bucket_array[2]); 
-		// printf(" key = %p\n",key);
-		// printf(" value = %p\n",value);		
 }
 // Διαργραφή απο το Hash Table του κλειδιού με τιμή key
 bool map_remove(Map map, Pointer key) {
