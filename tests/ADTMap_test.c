@@ -91,7 +91,6 @@ void test_insert(void) {
 	// Δοκιμάζουμε την insert εισάγοντας κάθε φορά νέους κόμβους
 	for (int i = 0; i < N; i++) {
 		value_array[i] = create_int(i);
-
 		// Εισαγωγή, δοκιμή και έλεγχος ότι ενημερώθηκε το size
 		insert_and_test(map, key_array[i], value_array[i]);
 

@@ -1,7 +1,7 @@
 {
 	"c_project": {
 		// Όνομα του εκτελέσιμου προγράμματος (μόνο για μεταγλώττιση πολλών αρχείων & make)
-		"program": "UsingCuckooHash_ADTMap_test",
+		"program": "UsingHashWithSet_ADTMap_test",
 
 		// Directory στο οποίο βρίσκεται το πρόγραμμα (μόνο για μεταγλώτισση με make)
 		"dir": "tests",

@@ -52,9 +52,8 @@ Map map_create(CompareFunc compare, DestroyFunc destroy_key, DestroyFunc destroy
 	map->capacity = prime_sizes[0];
 	map->array = malloc(map->capacity * sizeof(struct bucket));
 	for(int i = 0; i < map->capacity; i++) {
-		for(int i = 0; i < 3; i++)
-		map->array[i].bucket_array[i] = NULL;
-		//map->array[i].bucket_array[i] = NULL;
+		for(int j = 0; j < 3; j++)
+		map->array[i].bucket_array[j] = NULL;
 	}
 	map->size = 0;
 	map->compare = compare;
@@ -71,7 +70,8 @@ int map_size(Map map) {
 
 // Εισαγωγή στο hash table του ζευγαριού (key, item). Αν το key υπάρχει,
 // ανανέωση του με ένα νέο value, και η συνάρτηση επιστρέφει true.
-
+//δεν μπορούσα να την κάνω να λειτουργεί σωστά ,αντί να αποθηκεύει στο bucket_array[0] το mapnode
+//αποθηκεύει μόνο το key του mapnode και έτσι οι θεσεις 0,1,2 πιάνουν τα μέλη του mapnode αντι για ολο το struct mapnode
 void map_insert(Map map, Pointer key, Pointer value) {
 	bool already_in = false;
 	Pointer node = NULL;
@@ -79,19 +79,13 @@ void map_insert(Map map, Pointer key, Pointer value) {
 	uint pos;
 	pos = map->hash_function(key) % map->capacity;
 	if(map->array[pos].bucket_array_size < FIXED_SIZE) {
-	//   if(map->compare(map->array[pos].bucket_array,key) == 0) {
-	// 	  already_in = true;
-	// 	  node = &map->array[pos].bucket_array[0];
-	// 	  node_m = node;
-	//   }
 		if(map->array[pos].bucket_array[0] == NULL) { 
 			if(node == NULL) {
  				node = &map->array[pos].bucket_array[0];
-				//map->array[pos].bucket_array[0] = &node_m;
 				node_m = node;
-				//node_m->state = OCCUPIED;
+				node_m->state = OCCUPIED;
 				node_m->key = key;
-				//node_m->value = value;
+				node_m->value = value;
 				map->size++;
 				map->array[pos].bucket_array_size++;
 
@@ -101,9 +95,9 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			if(node == NULL) {
 				node = &map->array[pos].bucket_array[1];
 				node_m = node;
-				//node_m->state = OCCUPIED;
+				node_m->state = OCCUPIED;
 				node_m->key = key;
-				//node_m->value = value;
+				node_m->value = value;
 				map->size++;
 				map->array[pos].bucket_array_size++;
 			}
@@ -112,9 +106,9 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			if(node == NULL) {
 				node = &map->array[pos].bucket_array[2];
 				node_m = node;
-				//node_m->state = OCCUPIED;
+				node_m->state = OCCUPIED;
 				node_m->key = key;
-				//node_m->value = value;
+				node_m->value = value;
 				map->array[pos].bucket_array_size++;
 				map->size++;
 			}
@@ -128,21 +122,29 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			}
 		}
 	}
-		// printf(" [0] = %p\n",map->array[45].bucket_array[0]);
-		// printf(" [1] = %p\n",map->array[45].bucket_array[1]);
-		// printf(" [2] = %p\n",map->array[45].bucket_array[2]); 
+		// printf(" [0] = %p\n",map->array[pos].bucket_array[0]);
+		// printf(" [1] = %p\n",map->array[pos].bucket_array[1]);
+		// printf(" [2] = %p\n",map->array[pos].bucket_array[2]); 
 		// printf(" key = %p\n",key);
-		// printf(" value = %p\n",value);
-		// printf(" state = %p\n",&node_m->state);
-		// printf(" m_node = %p\n",node_m);
-		// printf(" &m_node = %p\n",&node_m);
-		// printf(" state = %p\n",&node_m->state);
-
-		
+		// printf(" value = %p\n",value);		
 }
 // Διαργραφή απο το Hash Table του κλειδιού με τιμή key
 bool map_remove(Map map, Pointer key) {
-	return false;
+		MapNode node = map_find_node(map, key);
+	if (node == MAP_EOF)
+		return false;
+
+	// destroy
+	if (map->destroy_key != NULL)
+		map->destroy_key(node->key);
+	if (map->destroy_value != NULL)
+		map->destroy_value(node->value);
+
+	// θέτουμε ως "deleted", ώστε να μην διακόπτεται η αναζήτηση, αλλά ταυτόχρονα να γίνεται ομαλά η εισαγωγή
+	node->state = DELETED;
+	map->size--;
+
+	return true;
 }
 
 // Αναζήτηση στο map, με σκοπό να επιστραφεί το value του κλειδιού που περνάμε σαν όρισμα.
