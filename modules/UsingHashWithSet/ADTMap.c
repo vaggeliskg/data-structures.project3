@@ -120,6 +120,9 @@ void map_insert(Map map, Pointer key, Pointer value) {
 			}
 		}
 	}
+	if(map->array[pos].bucket_array_size >= FIXED_SIZE) {
+		//set implementation (didnt have time to implement)
+	}
 }
 // Διαργραφή απο το Hash Table του κλειδιού με τιμή key
 bool map_remove(Map map, Pointer key) {
